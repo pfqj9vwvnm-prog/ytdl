@@ -22,8 +22,9 @@ def dl():
     q = (request.form.get("q") or "720").strip().lower()
     if q in ("audio", "mp3"):
         q = "audio"
-    elif not q.isdigit():
-        q = "720"
+    else:
+        q = "".join(c for c in q if c.isdigit()) or "720"
+
 
     d = tempfile.mkdtemp()
     opts = {
