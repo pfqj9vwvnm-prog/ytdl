@@ -20,6 +20,7 @@ def dl():
         abort(400)
 
     d = tempfile.mkdtemp()
+    
     opts = {
         "outtmpl": f"{d}/%(id)s.%(ext)s",
         "noplaylist": True,
