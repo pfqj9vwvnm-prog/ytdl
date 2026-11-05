@@ -7,7 +7,7 @@ TOKEN = os.environ["TOKEN"]
 
 @app.get("/")
 def index():
-    return "ok"
+    return "version 5"
 
 
 @app.post("/dl")
