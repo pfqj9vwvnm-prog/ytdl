@@ -19,36 +19,22 @@ def dl():
     if not url:
         abort(400)
 
-    q = (request.form.get("q") or "720").strip().lower()
-    if q in ("audio", "mp3"):
-        q = "audio"
-    else:
-        q = "".join(c for c in q if c.isdigit()) or "720"
-
-
     d = tempfile.mkdtemp()
     opts = {
         "outtmpl": f"{d}/%(id)s.%(ext)s",
         "noplaylist": True,
         "merge_output_format": "mp4",
         "quiet": True,
+        "format": ("bv*[height<=1080][ext=mp4]+ba[ext=m4a]"
+                   "/b[height<=1080][ext=mp4]"
+                   "/b[height<=1080]/b"),
     }
 
-    if q == "audio":
-        opts["format"] = "ba[ext=m4a]/ba"
-    else:
-        opts["format"] = (
-            f"bv*[height<={q}][ext=mp4]+ba[ext=m4a]"
-            f"/b[height<={q}][ext=mp4]"
-            f"/b[height<={q}]/b"
-        )
-
-        try:
+    try:
         with yt_dlp.YoutubeDL(opts) as y:
             y.download([url])
     except Exception as e:
         return str(e)[:500], 400
-
 
     files = glob.glob(f"{d}/*")
     if not files:
