@@ -43,8 +43,12 @@ def dl():
             f"/b[height<={q}]/b"
         )
 
-    with yt_dlp.YoutubeDL(opts) as y:
-        y.download([url])
+        try:
+        with yt_dlp.YoutubeDL(opts) as y:
+            y.download([url])
+    except Exception as e:
+        return str(e)[:500], 400
+
 
     files = glob.glob(f"{d}/*")
     if not files:
